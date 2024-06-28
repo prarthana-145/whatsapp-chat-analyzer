@@ -19,7 +19,7 @@ if uploaded_file is not None:
         num_messages,words,num_media,links=helper.fetch_stats(selected_user,df)
         st.title('Top Statistics')
         col1, col2, col3, col4 = st.columns(4)
-        st.title('Top Statistics')
+        # st.title('Top Statistics')
         with col1:
             st.header('Total Messages')
             st.title(num_messages)
@@ -37,10 +37,12 @@ if uploaded_file is not None:
         timeline = helper.monthy_timeline(selected_user,df)
         st.title('Monthly Timeline')
         fig,ax=plt.subplots()
+        plt.xticks(rotation=90)
+        plt.xlabel('Month')
+        plt.ylabel('Count')
         plt.figure(figsize=(60, 48), dpi=100)
-
         ax.plot(timeline['time'],timeline['message'],color='green')
-        plt.xticks(rotation='vertical')
+
         st.pyplot(fig)
 
         #daily timeline
@@ -48,9 +50,12 @@ if uploaded_file is not None:
         st.title('Daily Timeline')
         fig, ax = plt.subplots()
         plt.figure(figsize=(60, 48), dpi=100)
+        plt.xticks(rotation=90)
+        plt.xlabel('Days')
+        plt.ylabel('Count')
 
         ax.plot(timeline['only_date'], timeline['message'],color='black')
-        plt.xticks(rotation='vertical')
+
         st.pyplot(fig)
 
 
@@ -61,13 +66,13 @@ if uploaded_file is not None:
 
             col1,col2=st.columns(2)
             with col1:
-                plt.figure(figsize=(38,28),dpi=100)
+                plt.figure(figsize=(58,48),dpi=100)
                 sns.barplot(x='user', y='message_count', data=xx,color='red')
-                plt.title('Most Active Users',fontsize=80)
-                plt.xlabel('User',fontsize=70)
-                plt.ylabel('Message Count',fontsize=70)
-                plt.xticks(rotation=90,fontsize=60)
-                plt.yticks(fontsize=55)
+                plt.title('Most Active Users',fontsize=250)
+                plt.xlabel('User',fontsize=200)
+                plt.ylabel('Message Count',fontsize=200)
+                plt.xticks(rotation=90,fontsize=170)
+                plt.yticks(fontsize=170)
                 st.pyplot(plt)
             with col2:
                 st.dataframe(new_df)
@@ -79,13 +84,19 @@ if uploaded_file is not None:
         ax.imshow(df_wc)
         st.pyplot(fig)
 
+        st.title('Most Common Words(excluding Stop Words)')
         most_common_df=helper.most_common_words(selected_user,df)
         st.dataframe(most_common_df)
         fig,ax=plt.subplots()
 
         ax.barh(most_common_df[0],most_common_df[1])
-        plt.xticks(rotation=90)
-        st.title('Most Common Words(excluding Stop Words)')
+        ax.set_xlabel('Count', fontsize=22)
+        ax.set_ylabel('Message', fontsize=22)
+        plt.title('Most Common Words', fontsize=35)
+        plt.xticks(rotation=90, fontsize=12)
+        plt.yticks(fontsize=12)
+
+
         st.pyplot(fig)
 
         #activity heat map
@@ -97,6 +108,7 @@ if uploaded_file is not None:
         plt.title('Weekly Activity Heatmap')
         plt.xlabel('Period')
         plt.ylabel('Day')
+
         st.pyplot(fig)
 
 
@@ -110,7 +122,12 @@ if uploaded_file is not None:
             busy_day = helper.week_activity_map(selected_user,df)
             fig,ax=plt.subplots()
             ax.barh(busy_day.index,busy_day.values)
-            plt.xticks(rotation=90)
+            ax.set_xlabel('Activity Count', fontsize=30)
+            ax.set_ylabel('Day', fontsize=30)
+            plt.xticks(rotation=45,fontsize=17)
+            plt.yticks(fontsize=17)
+            # plt.xticks( fontsize=0)
+            # plt.yticks(fontsize=65)
             st.pyplot(fig)
 
         with col2:
@@ -118,7 +135,10 @@ if uploaded_file is not None:
             busy_month = helper.month_activity_map(selected_user,df)
             fig,ax=plt.subplots()
             ax.barh(busy_month.index,busy_month.values,color='orange')
-            plt.xticks(rotation=90)
+            ax.set_xlabel('Activity Count', fontsize=30)
+            ax.set_ylabel('Month',fontsize=30)
+            plt.xticks(rotation=45, fontsize=17)
+            plt.yticks(fontsize=17)
             st.pyplot(fig)
 
         emoji_df= helper.emoji_analysis(selected_user,df)
