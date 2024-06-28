@@ -98,19 +98,26 @@ def daily_timeline(selected_user,df):
 def week_activity_map(selected_user,df):
     if selected_user != 'Overall':
         df = df[df['user'] == selected_user]
+    days_order = ['Sunday', 'Saturday', 'Friday', 'Thursday', 'Wednesday', 'Tuesday', 'Monday']
+    day_counts = df['day_name'].value_counts().reindex(days_order, fill_value=0)
+    return day_counts
 
-    return df['day_name'].value_counts()
+
 
 def month_activity_map(selected_user,df):
     if selected_user != 'Overall':
         df = df[df['user'] == selected_user]
+    months_order = ['December', 'November', 'October', 'September', 'August', 'July', 'June', 'May', 'April', 'March', 'February', 'January']
 
-    return df['month'].value_counts()
+
+    month_counts = df['month'].value_counts().reindex(months_order, fill_value=0)
+    return month_counts
 
 def activity_heatmap(selected_user,df):
     if selected_user != 'Overall':
         df = df[df['user'] == selected_user]
     day_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
 
     user_heatmap=df.pivot_table(index='day_name', columns='period', values='message', aggfunc='count').fillna(0)
     user_heatmap = user_heatmap.reindex(day_order)
